@@ -36,7 +36,21 @@ const Formulario = () => {
       const url = "https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD"
       const respuesta = await fetch (url)
       const resultado = await respuesta.json()
-      console.log (resultado)
+    
+
+      const arrayCripto = resultado.Data.map ( cripto => {
+        
+        const objeto = {
+          id:cripto.CoinInfo.Name,
+          nombre : cripto.CoinInfo.FullName
+        }
+        
+        return objeto
+       
+
+      } )
+
+      console.log (arrayCripto)
 
     }
    
