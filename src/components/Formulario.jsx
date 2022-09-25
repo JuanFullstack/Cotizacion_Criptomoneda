@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
+import Error from './Error';
 import useSelectMonedas from '../hooks/useSelectMonedas';
 import { monedas } from '../data/monedas';
 
@@ -26,58 +27,67 @@ const InputSubmit = styled.input`
 
 
 const Formulario = () => {
- 
- const [ cripto , setcripto] = useState ([])
+    const [cripto, setcripto] = useState([]);
+    const [error, seterror] = useState(false);
 
-  //los arrays destructuring la variable se define por la posicion , 
-  // puedo usar otro nombre pero respetar orden state  = moneda //state = criptomoneda traido de useselectmodena 
-  
-  const [ moneda , SelectMonedas] = useSelectMonedas(' Elige tu moneda ' , monedas );
+    //los arrays destructuring la variable se define por la posicion ,
+    // puedo usar otro nombre pero respetar orden state  = moneda //state = criptomoneda traido de useselectmodena
 
-  const [ criptomoneda , Selectcriptomoneda] = useSelectMonedas(' Elige tu cripto ' , cripto );
-  
-  useEffect(() => {
+    const [moneda, SelectMonedas] = useSelectMonedas(' Elige tu moneda ', monedas);
 
-    const consultarAPI = async () =>{
-     
-      const url = "https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD"
-      const respuesta = await fetch (url)
-      const resultado = await respuesta.json()
-    
+    const [criptomoneda, Selectcriptomoneda] = useSelectMonedas(
+        ' Elige tu cripto ',
+        cripto
+    );
 
-      const arrayCripto = resultado.Data.map ( cripto => {
-        
-        const objeto = {
-          id:cripto.CoinInfo.Name,
-          nombre : cripto.CoinInfo.FullName
+    useEffect(() => {
+        const consultarAPI = async () => {
+            const url =
+                'https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD';
+            const respuesta = await fetch(url);
+            const resultado = await respuesta.json();
+
+            const arrayCripto = resultado.Data.map((cripto) => {
+                const objeto = {
+                    id: cripto.CoinInfo.Name,
+                    nombre: cripto.CoinInfo.FullName,
+                };
+
+                return objeto;
+            });
+
+            setcripto(arrayCripto);
+        };
+
+        consultarAPI();
+    }, []);
+
+
+    const handlesubmit = (e) => {
+        e.preventDefault();
+        if ([moneda, criptomoneda].includes('')) {
+          seterror (true)
+            return
         }
+    };
+
+    return (
+      <>
+        {error && <Error> Todos los Campos son obligatorios </Error> }
+        <form 
         
-        return objeto
-       
+        onSubmit={handlesubmit}
+        
+        >
+            <SelectMonedas />
 
-      } )
+            <Selectcriptomoneda />
 
-      setcripto (arrayCripto)
+            <InputSubmit type='submit' value='cotizar' />
+        </form>
 
-    }
-   
-    consultarAPI()
-    
-  }, [])
-  
-
-
-
-
-  return (
-    <form>
-      <SelectMonedas />
-      
-      <Selectcriptomoneda />
-
-      <InputSubmit type='submit' value='cotizar' />
-    </form>
-  );
+     </>
+    );
 };
 
 export default Formulario;

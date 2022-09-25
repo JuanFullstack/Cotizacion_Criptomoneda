@@ -43,6 +43,9 @@ const Heading = styled.h1`
 `;
 
 function App() {
+
+ 
+
   return (
     <Contenedor>
       <Imagen src={ImagenCripto} alt='img cripto ' />
