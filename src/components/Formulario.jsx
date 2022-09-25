@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import useSelectMonedas from '../hooks/useSelectMonedas';
 import { monedas } from '../data/monedas';
+
 
 const InputSubmit = styled.input`
   background-color: #9497ff;
@@ -26,8 +27,14 @@ const InputSubmit = styled.input`
 
 const Formulario = () => {
  
-  //la variable se define por indice  puedo usar otro nombre pero respetar orden state  = moneda 
-  const [ state , SelectMonedas] = useSelectMonedas(' Elige tu moneda ' , monedas );
+ const [ cripto , setcripto] = useState ([])
+
+  //los arrays destructuring la variable se define por la posicion , 
+  // puedo usar otro nombre pero respetar orden state  = moneda //state = criptomoneda traido de useselectmodena 
+  
+  const [ moneda , SelectMonedas] = useSelectMonedas(' Elige tu moneda ' , monedas );
+
+  const [ criptomoneda , Selectcriptomoneda] = useSelectMonedas(' Elige tu cripto ' , cripto );
   
   useEffect(() => {
 
@@ -50,7 +57,7 @@ const Formulario = () => {
 
       } )
 
-      console.log (arrayCripto)
+      setcripto (arrayCripto)
 
     }
    
@@ -65,7 +72,8 @@ const Formulario = () => {
   return (
     <form>
       <SelectMonedas />
-      {state}
+      
+      <Selectcriptomoneda />
 
       <InputSubmit type='submit' value='cotizar' />
     </form>

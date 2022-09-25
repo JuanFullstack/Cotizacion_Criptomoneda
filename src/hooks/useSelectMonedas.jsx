@@ -47,8 +47,8 @@ const useSelectMonedas = (label , opciones ) => {
       </SeleccionEstilos>
     </>
   );
-
-  return [ state , SelectMonedas];
+  // un arreglo retorna por indice , sin importar los nombres 
+  return [ state , SelectMonedas ];
 };
 
 export default useSelectMonedas;
